@@ -1,25 +1,27 @@
 package edu.apiFuncionarios.dao;
 
+import edu.apiFuncionarios.entity.Employee;
+
 import java.util.List;
 
 public interface EmployeeDAO {
 
     // create
 
-    EmployeeDAO create(EmployeeDAO employee);
+    void create(Employee employee);
 
     // read
 
-    List<EmployeeDAO> getAll();
+    List<Employee> getAll();
 
-    EmployeeDAO getById(int id);
+    Employee getById(int id);
 
     // update
 
-    EmployeeDAO updateById(int id);
+    void updateById(Employee employeed);
 
     // delete
 
-    EmployeeDAO deleteById(int id);
+    int deleteById(int id);
 
 }

@@ -1,6 +1,8 @@
 package edu.apiFuncionarios.dao;
 
+import edu.apiFuncionarios.entity.Employee;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -15,31 +17,28 @@ public class EmployeeDAOimpl implements EmployeeDAO{
     public EmployeeDAOimpl(EntityManager entityManager){ this.entityManager = entityManager;}
 
     @Override
-    public EmployeeDAO create(EmployeeDAO employee) {
-
-        // preciso da entidade
-        entityManager.persist(employee, );
-
-        return null;
+    public void create(Employee employee) {
+        // por que não preciso da entidade?
+        entityManager.persist(employee);
     }
 
     @Override
-    public List<EmployeeDAO> getAll() {
-        return List.of();
+    public List<Employee> getAll() {
+        TypedQuery<Employee> query = entityManager.createQuery("FROM Employee", Employee.class);
+        return query.getResultList();
     }
 
     @Override
-    public EmployeeDAO getById(int id) {
-        return null;
-    }
+    public Employee getById(int id) { return entityManager.find(Employee.class, id);}
 
     @Override
-    public EmployeeDAO updateById(int id) {
-        return null;
-    }
+    public void updateById(Employee employee) {entityManager.merge(employee);}
 
     @Override
-    public EmployeeDAO deleteById(int id) {
-        return null;
+    public int deleteById(int id) {
+        TypedQuery query = entityManager.createQuery("DELETE FROM Employee WHERE id = :id", Employee.class);
+        query.setParameter("id", id);
+
+        return query.executeUpdate();
     }
 }
