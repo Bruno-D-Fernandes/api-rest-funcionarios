@@ -3,6 +3,8 @@ package edu.apiFuncionarios.Controller;
 import edu.apiFuncionarios.dao.EmployeeDAO;
 import edu.apiFuncionarios.dao.EmployeeDAOimpl;
 import edu.apiFuncionarios.entity.Employee;
+import edu.apiFuncionarios.service.EmployeeService;
+import edu.apiFuncionarios.service.EmployeeServiceImpl;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -13,30 +15,33 @@ import java.util.List;
 @RequestMapping("api/employees")
 public class EmployeeController {
 
-    private EmployeeDAOimpl employeeDAOimpl;
+    private EmployeeServiceImpl employeeServiceImpl;
 
-    @Autowired
-    public EmployeeController(EmployeeDAOimpl employeeDAOimpl) {
-        this.employeeDAOimpl = employeeDAOimpl;
+    public EmployeeController(EmployeeServiceImpl employeeServiceImpl) {
+        this.employeeServiceImpl = employeeServiceImpl;
     }
 
     // String mesmo?
     @PostMapping
-    // toda modificação recebe Transactional, estudar melhor
-    @Transactional
     public String create(@RequestBody Employee employee){
-        employeeDAOimpl.create(employee);
+        employee.setId(0);
+        employeeServiceImpl.save(employee);
         return "Employee criado com sucesso";
+    }
+
+    @PutMapping
+    public Employee update(@RequestBody Employee employee){
+        return employeeServiceImpl.save(employee);
     }
 
     @GetMapping
     public List<Employee> getAll(){
-        return employeeDAOimpl.getAll();
+        return employeeServiceImpl.getAll();
     }
 
     @GetMapping("/{id}")
     public Employee getById(@PathVariable int id){
-        return employeeDAOimpl.getById(id);
+        return employeeServiceImpl.getById(id);
     }
 
 }

@@ -17,9 +17,10 @@ public class EmployeeDAOimpl implements EmployeeDAO{
     public EmployeeDAOimpl(EntityManager entityManager){ this.entityManager = entityManager;}
 
     @Override
-    public void create(Employee employee) {
-        // por que não preciso da entidade?
-        entityManager.persist(employee);
+    public Employee save(Employee employee) {
+        entityManager.merge(employee);
+
+        return employee;
     }
 
     @Override
@@ -32,13 +33,10 @@ public class EmployeeDAOimpl implements EmployeeDAO{
     public Employee getById(int id) { return entityManager.find(Employee.class, id);}
 
     @Override
-    public void updateById(Employee employee) {entityManager.merge(employee);}
+    public String deleteById(int id) {
+        Employee employee = entityManager.find(Employee.class, id);
+        entityManager.remove(employee);
 
-    @Override
-    public int deleteById(int id) {
-        TypedQuery query = entityManager.createQuery("DELETE FROM Employee WHERE id = :id", Employee.class);
-        query.setParameter("id", id);
-
-        return query.executeUpdate();
+        return ("removed: \n" + employee);
     }
 }
